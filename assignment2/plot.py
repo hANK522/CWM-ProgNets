@@ -3,13 +3,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # parameters to modify
-filename="test.data"
-label='label'
-xlabel = 'xlabel'
-ylabel = 'ylabel'
-title='Simple plot'
-fig_name='test.png'
-bins=100 #adjust the number of bins to your plot
+filename="ping_test_pi_f_p.log"
+label='ping'
+xlabel = 'trail'
+ylabel = 'rtt'
+title='ping test pi flood'
+fig_name='ping_test_pi_f.png'
+bins=1000 #adjust the number of bins to your plot
 
 
 t = np.loadtxt(filename, delimiter=" ", dtype="float")
