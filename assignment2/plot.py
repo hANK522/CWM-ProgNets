@@ -3,16 +3,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # parameters to modify
-filename="ping_test_pi_f_p.log"
-label='ping'
-xlabel = 'trail'
-ylabel = 'rtt'
-title='ping test pi flood'
-fig_name='ping_test_pi_f.png'
+filename="iperf3_lost.log"
+label='iperf3 lost'
+xlabel = 'bandwidth'
+ylabel = 'lost'
+title='iperf3 lost at different bandwidth'
+fig_name='iperf3_lost.png'
 bins=1000 #adjust the number of bins to your plot
 
 
-t = np.loadtxt(filename, delimiter=" ", dtype="float")
+t = np.loadtxt(filename, delimiter=" ", dtype="str")
 
 plt.plot(t[:,0], t[:,1], label=label)  # Plot some data on the (implicit) axes.
 #Comment the line above and uncomment the line below to plot a CDF
