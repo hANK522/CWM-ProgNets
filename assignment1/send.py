@@ -9,8 +9,8 @@ def randomword(length):
     return ''.join(random.choice(string.ascii_lowercase) for i in range(length))
 
 def send_random_traffic(num_packets, interface, src_ip, dst_ip):
-    dst_mac = "00:00:00:00:00:01"
-    src_mac= "CA:FE:CA:FE:CA:FE"
+    dst_mac = "E4:5F:01:84:8C:CE"
+    src_mac= "0C:37:96:5F:8A:18"
     total_pkts = 0
     port = 1024
     for i in range(num_packets):
