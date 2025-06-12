@@ -68,10 +68,11 @@ const bit<8>  P4CALC_OR    = 0x7c;   // '|'
 const bit<8>  P4CALC_CARET = 0x5e;   // '^'
 
 header p4calc_t {
-    bit<8>  op;
+    
     bit<8> p;
     bit<8> four;
     bit<8> ver;
+    bit<8>  op;
     bit<32> operand_a;
     bit<32> operand_b;
     bit<32> res;
@@ -226,6 +227,7 @@ control MyIngress(inout headers hdr,
             calculate.apply();
         } else {
             operation_drop();
+            //send_back(0);
         }
     }
 }
