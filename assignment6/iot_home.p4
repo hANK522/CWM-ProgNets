@@ -28,9 +28,10 @@ const bit<8>  IHOME_P     = 0x50;   // 'P'
 const bit<8>  IHOME_4     = 0x34;   // '4'
 const bit<8>  IHOME_VER   = 0x01;   // v0.1
 const bit<8>  IHOME_UPDATE= 0x55;   // 'U'
+const bit<8>  IHOME_CHECK = 0x43;   // 'C'
 const bit<8>  IHOME_USROFF= 0x30;   // '0'
 const bit<8>  IHOME_USRON = 0x31;   // '1'
-
+register<bit<32>>(1) current_status;
 
 header ihome_t{
     
@@ -38,8 +39,8 @@ header ihome_t{
     bit<8> four;
     bit<8> ver;
     bit<8> cmd;
-    bit<16> time;
-    bit<8> status;
+    bit<32> time;
+    bit<32> status;
 }
     
 struct headers {
@@ -108,28 +109,38 @@ control MyIngress(inout headers hdr,
         	tmp_mac = hdr.ethernet.dstAddr;
         	hdr.ethernet.dstAddr = hdr.ethernet.srcAddr;
         	hdr.ethernet.srcAddr = tmp_mac;
+        	
+        	bit<32> tmp_status;
+        	current_status.read(tmp_status, 0);
+        	hdr.ihome.status = tmp_status;
          
         	standard_metadata.egress_spec = standard_metadata.ingress_port;
         }
         
         action light_time(){
+        	bit<32> tmp;
        		if (hdr.ihome.time > 1800 && hdr.ihome.time < 2300){
-       			hdr.ihome.status = 1; //on	
+       			tmp = 1; //on	
        		}
        			
        		else{
-       			hdr.ihome.status = 0; //off
+       			tmp = 0; //off
        		}
+       		current_status.write(0,tmp);
+       		send_back();
+       	}
+       	
+       	action light_status(){
        		send_back();
        	}
         
         action light_on(){
-        	hdr.ihome.status = 1;
+        	current_status.write(0,3);
         	send_back();
         }
         
         action light_off(){
-        	hdr.ihome.status = 0;
+        	current_status.write(0,2);
         	send_back();
         }
         	
@@ -146,11 +157,13 @@ control MyIngress(inout headers hdr,
 			light_time;
 			light_on;
 			light_off;
+			light_status;
 			operation_drop;
         	}
         	const default_action = operation_drop();
         	const entries = {
         		IHOME_UPDATE: light_time();
+        		IHOME_CHECK : light_status();
         		IHOME_USRON : light_on();
         		IHOME_USROFF: light_off();
         
@@ -162,8 +175,8 @@ control MyIngress(inout headers hdr,
         	if (hdr.ihome.isValid()) {
             		modify_status.apply();
         	} else {
-            		//operation_drop();
-            		send_back();
+            		operation_drop();
+            		//send_back();
         	}
     	}
 }

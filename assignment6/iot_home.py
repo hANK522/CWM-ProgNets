@@ -34,25 +34,32 @@ def main():
     s = ''
     #iface = get_if()
     iface = "enx0c37965f8a18"
-
+    
     while True:
         s = input('cmd: ')
-        if s == "quit":
-            break
-        # print(s)
-        t = input('time:')
+        if s == "U":
+       	    t = input('time:')
+        else:
+            t = 0
+        
+        
         try:
             
-            pkt = Ether(dst='E4:5F:01:84:8C:CE', type=0x1234) / Ihome(cmd = s,time = t)
+            pkt = Ether(dst='E4:5F:01:84:8C:CE', type=0x1234) / Ihome(cmd = s,time = int(t))
 
             pkt = pkt/' '
 
-            pkt.show()
+            #pkt.show()
             resp = srp1(pkt, iface=iface,timeout=5, verbose=False)
             if resp:
                 ihome=resp[Ihome]
-                if p4calc:
-                    print(ihome.status)
+                if ihome:
+                    current_status = ihome.status
+                    #print(current_status)
+                    if current_status == 1 or current_status == 3:
+                    	print('Light ON')
+                    else:
+                    	print('Light OFF')
                 else:
                     print("cannot find ihome header in the packet")
             else:
