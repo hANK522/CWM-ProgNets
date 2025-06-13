@@ -51,8 +51,10 @@ def main():
 
             #pkt.show()
             resp = srp1(pkt, iface=iface,timeout=5, verbose=False)
+            
             if resp:
                 ihome=resp[Ihome]
+                
                 if ihome:
                     current_status = ihome.status
                     #print(current_status)

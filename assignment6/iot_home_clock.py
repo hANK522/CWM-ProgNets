@@ -70,7 +70,7 @@ def main():
     
 	while True:
 		t = add_n_mins(t,n)
-		print(t)
+		
 
         
 		try:
@@ -79,6 +79,7 @@ def main():
 			if resp:
 				ihome=resp[Ihome]
 				if ihome:
+					print(t)
 					current_status = ihome.status
 					#print(current_status) 
 					if current_status == 1:
@@ -98,6 +99,7 @@ def main():
 						print(t)
 						print('Light ON')
 					resp = snl(iface, u, t)
+					
 				else:
 					print("cannot find ihome header in the packet")
 			else:
