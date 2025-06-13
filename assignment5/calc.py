@@ -84,7 +84,7 @@ def main():
 
             pkt = pkt/' '
 
-            #pkt.show()
+            pkt.show()
             resp = srp1(pkt, iface=iface,timeout=5, verbose=False)
             if resp:
                 p4calc=resp[P4calc]
